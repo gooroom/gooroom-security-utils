@@ -2,7 +2,7 @@ Source: gooroom-security-utils
 Section: admin
 Priority: optional
 Maintainer: Gooroom Maintainers <gooroom@gooroom.kr>
-Build-Depends: debhelper (>= 9), autotools-dev, autoconf, automake, intltool, libtool, python3-dev
+Build-Depends: debhelper (>= 9), autotools-dev, autoconf, automake, intltool, libtool, python3-dev, pkg-config
 Standards-Version: 3.9.6
 
 Package: gooroom-security-utils
