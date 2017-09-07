@@ -10,14 +10,18 @@ import subprocess
 EXE_PROTECTOR_SERVICE_NAME = 'gep-daemon'
 
 #-----------------------------------------------------------------------
-def get_status(logs, vulnerable):
-    """
-    로그와 시스템의 특정 정보를 이용해서 실행파일 검증 기능이 정상적으로 동작하는지 반환한다.
-    '안전', '취약', '중단' 중 하나를 반환한다
-    """
-    if (vulnerable == True):
+def get_status(vulnerable):
+    if vulnerable == True:
         return '취약'
 
+    return '안전'
+
+
+#-----------------------------------------------------------------------
+def get_run_status(logs):
+    """
+    로그와 시스템의 특정 정보를 이용해서 실행파일 검증 기능이 정상적으로 동작하는지 반환한다.
+    """
     # 서비스 구동 상태와 정상 설치 여부를 검사
     pipe = subprocess.Popen('/usr/sbin/service %s status' % EXE_PROTECTOR_SERVICE_NAME, stdout=subprocess.PIPE, stderr=None, shell=True)
     status_output, error =  pipe.communicate()
@@ -30,7 +34,7 @@ def get_status(logs, vulnerable):
        not '%s active.' % EXE_PROTECTOR_SERVICE_NAME in check_output:
         return '중단'
 
-    return '안전'
+    return '동작'
 
 
 #-----------------------------------------------------------------------
@@ -87,28 +91,7 @@ def get_summary(logs):
                 exec_logs.append({"type": 1, "log": log})
                 vulnerable = True
 
-    exec_status = get_status(logs, vulnerable)
-    return [exec_status, exec_logs]
+    run = get_run_status(logs)
+    status = get_status(vulnerable)
 
-#-----------------------------------------------------------------------
-def get_summary_emul(logs):
-    """
-    emulate get_summary
-    """
-
-    vulnerable = False
-    log = []
-
-    import random
-    rand_no = random.randrange(6)
-    if rand_no < len(korean_text):
-        vulnerable = True
-
-        cause_string = list(korean_text.values())[rand_no]
-        file_string = 'none'
-
-        import datetime
-        log.append("%s 비인가된 실행파일(%s, %s)이 실행되어 차단하였습니다." \
-            % (datetime.datetime.now(), cause_string, file_string))
-
-    return [get_status(logs, vulnerable), log]
+    return [run, status, exec_logs]

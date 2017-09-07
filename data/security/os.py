@@ -11,14 +11,18 @@ import subprocess
 OS_PROTECTOR_SERVICE_NAME = 'gop-daemon'
 
 #-----------------------------------------------------------------------
-def get_status(logs, vulnerable):
-    """
-    로그와 시스템의 특정 정보를 이용해서 OS 보호 기능이 정상적으로 구동되었는지 여부를 반환한다.
-    '안전', '취약', '중단' 중 하나를 반환한다.
-    """
+def get_status(vulnerable):
     if vulnerable == True:
         return '취약'
 
+    return '안전'
+
+#-----------------------------------------------------------------------
+def get_run_status(logs):
+    """
+    로그와 시스템의 특정 정보를 이용해서 OS 보호 기능이 정상적으로 구동되었는지 여부를 반환한다.
+    '동작', '중단' 중 하나를 반환한다.
+    """
     # 서비스 구동 상태와 정상 설치 여부를 검사
     pipe = subprocess.Popen('/usr/sbin/service %s status' % OS_PROTECTOR_SERVICE_NAME, stdout=subprocess.PIPE, stderr=None, shell=True)
     status_output, error =  pipe.communicate()
@@ -33,7 +37,7 @@ def get_status(logs, vulnerable):
        not '%s active.' % OS_PROTECTOR_SERVICE_NAME in check_output:
         return '중단'
 
-    return "안전"
+    return '동작'
 
 
 """
@@ -125,32 +129,6 @@ def get_summary(logs):
                     os_logs.append({"type": 1, "log": log})
                     break
 
-    os_status = get_status(logs, vulnerable)
-    return [os_status, os_logs]
-
-#-----------------------------------------------------------------------
-def get_summary_emul(logs):
-    """
-    emulate get_summary
-    """
-
-    vulnerable = False
-    log = []
-
-    import random
-    es_len = len(errorcode_string)
-    err_no = random.randrange(es_len*2)
-
-    if err_no >= es_len or err_no == 0 or err_no == 1 or err_no == 4:
-        pass
-
-    else:
-        vulnerable = True
-
-        import datetime
-        log.append('%s %s' % \
-            (datetime.datetime.now(), errorcode_string[str(err_no)]))
-
-    return [get_status(logs, vulnerable), log]
-
-
+    run = get_run_status(logs)
+    status = get_status(vulnerable)
+    return [run, status, os_logs]

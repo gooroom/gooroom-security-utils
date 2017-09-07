@@ -11,14 +11,17 @@ import subprocess
 BOOT_PROTECTOR_SERVICE_NAME = 'gbp-daemon'
 
 #-----------------------------------------------------------------------
-def get_status(logs, vulnerable):
-    """
-    로그와 시스템의 특정 정보를 이용해서 안전하게 부팅되었는지 여부를 반환한다.
-    '안전', '취약', '중단' 중 하나를 반환한다
-    """
-    if (vulnerable == True):
+def get_status(vulnerable):
+    if vulnerable == True:
         return '취약'
 
+    return '안전'
+
+#-----------------------------------------------------------------------
+def get_run_status(logs):
+    """
+    로그와 시스템의 특정 정보를 이용해서 안전하게 부팅되었는지 여부를 반환한다.
+    """
     # 서비스 구동 상태와 정상 설치 여부를 검사
     pipe = subprocess.Popen('/usr/sbin/service %s status' % BOOT_PROTECTOR_SERVICE_NAME, stdout=subprocess.PIPE, stderr=None, shell=True)
     status_output, error =  pipe.communicate()
@@ -32,7 +35,7 @@ def get_status(logs, vulnerable):
        not '%s active.' % BOOT_PROTECTOR_SERVICE_NAME in check_output:
         return '중단'
 
-    return '안전'
+    return '동작'
 
 #-----------------------------------------------------------------------
 def get_summary(logs):
@@ -67,15 +70,7 @@ def get_summary(logs):
 
             boot_logs.append({"type": local_vulnerable, "log":log})
 
-    boot_status = get_status(logs, vulnerable)
+    run = get_run_status(logs)
+    status = get_status(vulnerable)
 
-    return [boot_status, boot_logs]
-
-#-----------------------------------------------------------------------
-def get_summary_emul(logs):
-    """
-    emulate get_summary
-    """
-
-    vulnerable = False
-    return [get_status(logs, vulnerable), []]
+    return [run, status, boot_logs]

@@ -10,7 +10,7 @@ from systemd import journal
 
 #-----------------------------------------------------------------------
 SECURITY_FEATURES = ('os', 'exe', 'boot', 'media')
-STATUS_KOR_TO_ENG = {'안전':'safety', '취약':'vulnerable', '중단':'stop'}
+STATUS_KOR_TO_ENG = {'안전':'safe', '취약':'vulnerable', '동작': 'run', '중단':'stop'}
 
 #-----------------------------------------------------------------------
 def get_summary():
@@ -26,8 +26,8 @@ def get_summary():
     각각 OS 보호 기술 및 실행파일 보호 기술의 로그를 수집하기 위함이다.
     """
     match_strings = ['SYSLOG_IDENTIFIER=gbp-daemon', 'SYSLOG_IDENTIFIER=gep-daemon',
-        'SYSLOG_IDENTIFIER=gop-daemon', 'SYSLOG_IDENTIFIER=grac-daemon',
-        'PRIORITY=3', '_TRANSPORT=audit']
+        'SYSLOG_IDENTIFIER=gop-daemon', 'SYSLOG_IDENTIFIER=grac-daemon', 'PRIORITY=3',
+        '_AUDIT_FIELD_OP="appraise_data"']
 
     j = journal.Reader()
 
@@ -54,8 +54,9 @@ def get_summary():
 
     for sf in SECURITY_FEATURES:
         m = importlib.import_module('security.'+sf)
-        status, log = getattr(m, 'get_summary')(logs)
+        run, status, log = getattr(m, 'get_summary')(logs)
 
+        result[sf+'_run'] = STATUS_KOR_TO_ENG[run]
         result[sf+'_status'] = STATUS_KOR_TO_ENG[status]
         result[sf+'_log'] = log
 
