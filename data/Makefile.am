@@ -14,7 +14,6 @@ bootprotector_DATA=\
 	boot-protector/gbp-daemon	\
 	boot-protector/install.sh	\
 	boot-protector/make_sig.sh	\
-	boot-protector/temp_db	\
 	boot-protector/uninstall.sh
 
 exeprotectordir=$(datadir)/gooroom/security/exe-protector
