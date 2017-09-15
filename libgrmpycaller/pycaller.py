@@ -21,10 +21,8 @@ def do_task(taskin):
 
     except:
         taskout['result'] = 'ERROR'
-        e = traceback.format_exc()
-        rp = reprlib.Repr()
-        rp.maxstring = 512
-        taskout['message'] = rp.repr(e)
+        e = '\n'.join(traceback.format_exc().split('\n')[-4:-1])
+        taskout['message'] = e
 
     return json.dumps(taskout)
 
@@ -35,9 +33,10 @@ def task_verify_signature(taskin, taskout):
     '''
 
     file_name = taskin['file_name']
-    short_file_name = file_name.split('/')[-1]
+    splited = file_name.split('/')
+    short_file_name = splited[-1]
     signature_name = '/var/tmp/gooroom-agent-service/%s/%s+signature' \
-        % (short_file_name, short_file_name)
+        % ('.'.join(splited), short_file_name)
 
     with open(file_name) as f0:
         data = f0.read()
@@ -50,4 +49,3 @@ def task_verify_signature(taskin, taskout):
     OpenSSL.crypto.verify(cert, 
         base64.b64decode(signature.encode('utf8')), 
         data.encode('utf8'), 'sha256')
-
