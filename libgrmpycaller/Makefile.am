@@ -10,7 +10,7 @@ libgrmpycaller_include_HEADERS = grmpycaller.h
 
 libgrmpycaller_la_SOURCES = grmpycaller.c
 
-libgrmpycaller_la_CFLAGS = $(PYTHON35m_CFLAGS)
+libgrmpycaller_la_CFLAGS = $(PYTHON35m_CFLAGS) -lssl -lcrypto
 
 libgrmpycaller_la_LDFLAGS = \
 	-no-undefined \
