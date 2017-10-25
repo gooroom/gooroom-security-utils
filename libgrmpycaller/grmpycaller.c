@@ -1,7 +1,3 @@
-/*
-* Author: Hyun-min Kim <hmkim@hancom.com>
-*/
-
 #include <openssl/aes.h>
 #include <openssl/evp.h>
 #include <openssl/rsa.h>
@@ -102,7 +98,7 @@ static int _verify_signature(
     }
 
 CLEANUP:
-    EVP_MD_CTX_cleanup(evp_ctx);
+    EVP_MD_CTX_free(evp_ctx);
     free(decoded_signature);
     EVP_PKEY_free(evp_key);
 
