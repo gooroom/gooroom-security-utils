@@ -50,7 +50,8 @@ def get_summary(logs):
 
     for data in logs:
         # syslog의 tag 정보와 실제 로그를 남긴 프로세스 정보를 같이 비교함
-        if data['SYSLOG_IDENTIFIER'] != BOOT_PROTECTOR_SERVICE_NAME or \
+        if 'SYSLOG_IDENTIFIER' in data.keys() and \
+           data['SYSLOG_IDENTIFIER'] != BOOT_PROTECTOR_SERVICE_NAME or \
            not '_COMM' in data or \
            data['_COMM'] != BOOT_PROTECTOR_SERVICE_NAME:
             continue

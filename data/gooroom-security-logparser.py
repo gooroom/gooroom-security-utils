@@ -26,8 +26,9 @@ def get_summary():
     각각 OS 보호 기술 및 실행파일 보호 기술의 로그를 수집하기 위함이다.
     """
     match_strings = ['SYSLOG_IDENTIFIER=gbp-daemon', 'SYSLOG_IDENTIFIER=gep-daemon',
-        'SYSLOG_IDENTIFIER=gop-daemon', 'SYSLOG_IDENTIFIER=grac-daemon', 'PRIORITY=3',
-        '_AUDIT_FIELD_OP="appraise_data"']
+        'SYSLOG_IDENTIFIER=gop-daemon', 'SYSLOG_IDENTIFIER=grac-daemon',
+        'SYSLOG_IDENTIFIER=gooroom-browser', 'PRIORITY=3',
+		'PRIORITY=4', '_AUDIT_FIELD_OP="appraise_data"']
 
     j = journal.Reader()
 
