@@ -9,8 +9,7 @@ import subprocess
 
 BROWSER_SERVICE_NAME = 'gooroom-browser'
 GRAC_SERVICE_NAME = 'grac-device-daemon'
-#GRAC_NETWORK_NAME = 'GRAC\: Disallowed Network'
-GRAC_NETWORK_NAME = 'GRAC'
+GRAC_NETWORK_NAME = 'GRAC: Disallowed Network'
 GRAC_NAME = 'GRAC'
 GRAC_COMM = 'grac-apply.sh'
 
@@ -136,6 +135,7 @@ def get_grac_summary(logs):
     grac_logs = []
     vulnerable = False
 
+    p_errorcode = re.compile('errorcode=\S*')
     p_cause = re.compile('cause=\S*')
     p_kind = re.compile('kind=\S*')
     p_src_ip = re.compile('SRC=\S*')
@@ -150,6 +150,24 @@ def get_grac_summary(logs):
         if 'SYSLOG_IDENTIFIER' in data.keys() and \
             data['SYSLOG_IDENTIFIER'] == GRAC_NAME and \
            '_COMM' in data and data['_COMM'] == GRAC_COMM:
+
+            # 서비스 시작과 종료에 관련된 정보
+            search = p_errorcode.search(data['MESSAGE'])
+            if search != None:
+                error_string = search.group().replace('errorcode=', '')
+                if error_string == '0':
+                    log = '%s 매체 제어 서비스가 정상적으로 실행되었습니다' % (data['__REALTIME_TIMESTAMP'].strftime('%Y-%m-%d %H:%M:%S'))
+                elif error_string == '1':
+                    log = '%s 매체 제어 서비스가 정상적으로 종료되었습니다' % (data['__REALTIME_TIMESTAMP'].strftime('%Y-%m-%d %H:%M:%S'))
+                else:
+                    log = '%s 매체 제어 기능이 비활성화되어 서비스가 실행되지 않았습니다' % (data['__REALTIME_TIMESTAMP'].strftime('%Y-%m-%d %H:%M:%S'))
+                    vulnerable = True
+                    local_vulnerable = 1
+
+                grac_logs.append({"type": local_vulnerable, "log": log})
+                continue
+
+            # 매체 제어 통제와 관련된 정보
             search_cause = p_cause.search(data['MESSAGE'])
             search_kind = p_kind.search(data['MESSAGE'])
             if search_cause == None or search_kind == None:
