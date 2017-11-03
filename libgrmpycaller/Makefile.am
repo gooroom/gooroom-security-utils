@@ -18,7 +18,7 @@ libgrmpycaller_la_LDFLAGS = \
 
 libgrmpycaller_la_LIBADD = $(PYTHON35m_LIBS)
 
-pycallerdir=$(libdir)/gooroom-security-utils/pycaller
+pycallerdir=/usr/lib/gooroom-security-utils/pycaller
 pycaller_DATA=	\
 	pycaller.py
 

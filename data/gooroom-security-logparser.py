@@ -51,7 +51,7 @@ def get_summary():
     result = {}
     status_summary = "안전"
 
-    sys.path.append('/usr/lib/x86_64-linux-gnu/gooroom-security-utils')
+    sys.path.append('/usr/lib/gooroom-security-utils')
 
     for sf in SECURITY_FEATURES:
         m = importlib.import_module('security.'+sf)

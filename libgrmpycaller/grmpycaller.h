@@ -12,7 +12,7 @@
 #define DIGEST_VERIFY_UPDATE_ERROR      -4
 #define DIGEST_VERIFY_FINAL_ERROR       -5
 
-#define PYTHONPATH  "PYTHONPATH=/usr/lib/x86_64-linux-gnu/gooroom-security-utils/pycaller/"
+#define PYTHONPATH  "PYTHONPATH=/usr/lib/gooroom-security-utils/pycaller/"
 #define MODULE_NAME "pycaller"
 #define FUNC_NAME "do_task"
 
