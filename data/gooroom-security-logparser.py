@@ -25,10 +25,13 @@ def get_summary():
     SYSLOG_IDENTIFIER는 데몬의 로그를 수집하기 위함이며, PRIORITY와 _TRANSPORT는
     각각 OS 보호 기술 및 실행파일 보호 기술의 로그를 수집하기 위함이다.
     """
-    match_strings = ['SYSLOG_IDENTIFIER=gbp-daemon', 'SYSLOG_IDENTIFIER=gep-daemon',
+    match_or_strings = ['SYSLOG_IDENTIFIER=gbp-daemon', 'SYSLOG_IDENTIFIER=gep-daemon',
         'SYSLOG_IDENTIFIER=gop-daemon', 'SYSLOG_IDENTIFIER=grac-daemon',
         'SYSLOG_IDENTIFIER=gooroom-browser', 'PRIORITY=3',
-		'PRIORITY=4', '_AUDIT_FIELD_OP="appraise_data"']
+	'_AUDIT_FIELD_OP="appraise_data"']
+
+    # 방화벽 로그만 추려내기위한 특수한 필터
+    match_and_strings = ['PRIORITY=4', 'SYSLOG_IDENTIFIER=kernel']
 
     j = journal.Reader()
 
@@ -37,9 +40,12 @@ def get_summary():
         from_time = datetime.datetime.strptime(sys.argv[1], '%Y%m%d-%H%M%S.%f')
         j.seek_realtime(from_time)
 
-    for match in match_strings:
+    for match in match_or_strings:
         j.add_match(match)
         j.add_disjunction()
+
+    for match in match_and_strings:
+        j.add_match(match)
 
     # 엔트리를 추출해서 로그 배열에 별도 저장
     for entry in j:
