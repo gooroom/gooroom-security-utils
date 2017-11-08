@@ -27,11 +27,10 @@ def get_summary():
     """
     match_or_strings = ['SYSLOG_IDENTIFIER=gbp-daemon', 'SYSLOG_IDENTIFIER=gep-daemon',
         'SYSLOG_IDENTIFIER=gop-daemon', 'SYSLOG_IDENTIFIER=grac-daemon',
-        'SYSLOG_IDENTIFIER=gooroom-browser', 'PRIORITY=3',
-	'_AUDIT_FIELD_OP="appraise_data"']
+        'SYSLOG_IDENTIFIER=gooroom-browser', '_AUDIT_FIELD_OP="appraise_data"']
 
-    # 방화벽 로그만 추려내기위한 특수한 필터
-    match_and_strings = ['PRIORITY=4', 'SYSLOG_IDENTIFIER=kernel']
+    # OS 보호 및 방화벽 로그를 추려내기위한 특수한 필터
+    match_and_strings = ['PRIORITY=3', 'SYSLOG_IDENTIFIER=kernel']
 
     j = journal.Reader()
 
