@@ -7,6 +7,7 @@ import re
 import datetime
 import os
 import subprocess
+import shlex
 
 OS_PROTECTOR_SERVICE_NAME = 'gop-daemon'
 
@@ -24,11 +25,15 @@ def get_run_status(logs):
     '동작', '중단' 중 하나를 반환한다.
     """
     # 서비스 구동 상태와 정상 설치 여부를 검사
-    pipe = subprocess.Popen('/usr/sbin/service %s status' % OS_PROTECTOR_SERVICE_NAME, stdout=subprocess.PIPE, stderr=None, shell=True)
+    cmd = '/usr/sbin/service %s status' % OS_PROTECTOR_SERVICE_NAME
+    argv = shlex.split(cmd)
+    pipe = subprocess.Popen(argv, stdout=subprocess.PIPE, stderr=None, shell=False)
     status_output, error =  pipe.communicate()
     status_output = status_output.decode('utf-8')
 
-    pipe = subprocess.Popen('/usr/sbin/service %s check' % OS_PROTECTOR_SERVICE_NAME, stdout=subprocess.PIPE, stderr=None, shell=True)
+    cmd = '/usr/sbin/service %s check' % OS_PROTECTOR_SERVICE_NAME
+    argv = shlex.split(cmd)
+    pipe = subprocess.Popen(argv, stdout=subprocess.PIPE, stderr=None, shell=False)
     check_output, error =  pipe.communicate()
     check_output = check_output.decode('utf-8')
 

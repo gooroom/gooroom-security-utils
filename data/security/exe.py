@@ -6,6 +6,7 @@
 import re
 import datetime
 import subprocess
+import shlex
 
 EXE_PROTECTOR_SERVICE_NAME = 'gep-daemon'
 
@@ -23,11 +24,15 @@ def get_run_status(logs):
     로그와 시스템의 특정 정보를 이용해서 실행파일 검증 기능이 정상적으로 동작하는지 반환한다.
     """
     # 서비스 구동 상태와 정상 설치 여부를 검사
-    pipe = subprocess.Popen('/usr/sbin/service %s status' % EXE_PROTECTOR_SERVICE_NAME, stdout=subprocess.PIPE, stderr=None, shell=True)
+    cmd = '/usr/sbin/service %s status' % EXE_PROTECTOR_SERVICE_NAME
+    argv = shlex.split(cmd)
+    pipe = subprocess.Popen(argv, stdout=subprocess.PIPE, stderr=None, shell=False)
     status_output, error =  pipe.communicate()
     status_output = status_output.decode('utf-8')
 
-    pipe = subprocess.Popen('/usr/sbin/service %s check' % EXE_PROTECTOR_SERVICE_NAME, stdout=subprocess.PIPE, stderr=None, shell=True)
+    cmd = '/usr/sbin/service %s check' % EXE_PROTECTOR_SERVICE_NAME
+    argv = shlex.split(cmd)
+    pipe = subprocess.Popen(argv, stdout=subprocess.PIPE, stderr=None, shell=False)
     check_output, error =  pipe.communicate()
     check_output = check_output.decode('utf-8')
     if not 'active (exited)' in status_output or \
