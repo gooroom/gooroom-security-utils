@@ -12,7 +12,7 @@ BROWSER_SERVICE_NAME = 'gooroom-browser'
 GRAC_SERVICE_NAME = 'grac-device-daemon'
 GRAC_NETWORK_NAME = 'GRAC: Disallowed Network'
 GRAC_NAME = 'GRAC'
-GRAC_COMM = 'grac-apply.sh'
+GRAC_COMM = ['grac-apply.sh', 'grac-status.sh']
 
 #-----------------------------------------------------------------------
 def get_status(vulnerable):
@@ -152,7 +152,7 @@ def get_grac_summary(logs):
         # syslog의 tag 정보와 실제 로그를 남긴 프로세스 정보를 같이 비교함
         if 'SYSLOG_IDENTIFIER' in data.keys() and \
             data['SYSLOG_IDENTIFIER'] == GRAC_NAME and \
-           '_COMM' in data and data['_COMM'] == GRAC_COMM:
+           '_COMM' in data and data['_COMM'] in GRAC_COMM:
 
             # 서비스 시작과 종료에 관련된 정보
             search = p_errorcode.search(data['MESSAGE'])

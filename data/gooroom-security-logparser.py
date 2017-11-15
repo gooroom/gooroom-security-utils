@@ -19,14 +19,13 @@ def get_summary():
     요약로그정보를 출력
     """
 
-    logs = []
     func_name = None
     """
     SYSLOG_IDENTIFIER는 데몬의 로그를 수집하기 위함이며, PRIORITY와 _TRANSPORT는
     각각 OS 보호 기술 및 실행파일 보호 기술의 로그를 수집하기 위함이다.
     """
     match_or_strings = ['SYSLOG_IDENTIFIER=gbp-daemon', 'SYSLOG_IDENTIFIER=gep-daemon',
-        'SYSLOG_IDENTIFIER=gop-daemon', 'SYSLOG_IDENTIFIER=grac-daemon',
+        'SYSLOG_IDENTIFIER=gop-daemon', 'SYSLOG_IDENTIFIER=GRAC',
         'SYSLOG_IDENTIFIER=gooroom-browser', '_AUDIT_FIELD_OP="appraise_data"']
 
     # OS 보호 및 방화벽 로그를 추려내기위한 특수한 필터
@@ -46,11 +45,16 @@ def get_summary():
     for match in match_and_strings:
         j.add_match(match)
 
+    logs = []
     # 엔트리를 추출해서 로그 배열에 별도 저장
     for entry in j:
+        if '_KERNEL_SUBSYSTEM' in entry.keys():
+            continue
+
         if type(entry['MESSAGE']) is bytes:
             entry['MESSAGE'] = \
                 str(entry['MESSAGE'].decode('unicode_escape').encode('utf-8'))
+
         logs.append(entry)
 
     result = {}
@@ -80,4 +84,3 @@ if __name__ == '__main__':
                                 sort_keys=True, 
                                 indent=4, 
                                 separators=(',', ': ')))
-
