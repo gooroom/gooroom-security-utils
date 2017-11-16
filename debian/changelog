@@ -1,3 +1,36 @@
+gooroom-security-utils (0.1.1+grm1u1) unstable; urgency=medium
+
+  [ hmkim ]
+  * [e94fc8d7] added pkg-config in debian/control
+  * [8032238f] update logparser for agent-tray-icon, remove python3-dev in control of Depends
+  * [d17eafc6] updated get_run_status in media.py
+  * [41105bbd] changed dirpath of signatures
+  * [be3cd416] added verify_signature() for browser.
+  * [ab6bb6b2] changed EVP_MD_CTX_cleanup to EVP_MD_CTX_free for openssl1.1
+  * [61248e3b] changed libssl-dev to openssl(>= 1.1) in build dependuncies.
+  * [f2139656] changed security directory and pycaller.py path from /usr/lib/[arch] to /usr/lib for ARM.
+  * [4581a739] (bug fix)rollback build-dependencies from openssl to libssl-dev in debian/control.
+  * [50d427ec] added copyright in grmpycaller.c
+
+  [ Seunghun Han ]
+  * [538884b5] add run status and change gbp-daemon code
+  * [bdae92af] add db.sig file
+  * [14d13f69] add db.sig file and change Makefile.am
+  * [dbf7128f] Add grac and browser parser
+  * [89a14a19] Change grac network log filter and add daemon status log
+  * [601aea67] Change iptable filter
+  * [37bf41fc] Merge OS protector log filter and iptable log filter
+  * [06abf5eb] Remove potential security vulnerabilities
+  * [b8d8609c] Change log filters for OS protector and firewall
+
+  [ jongkyung.woo ]
+  * [71ee385e] Added libpython3.5 to the install dependency package
+  * [6015de8f] Removed boot-protector and exe-protector related files
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Thu, 16 Nov 2017 17:36:29 +0900
+
 gooroom-security-utils (0.1.0) unstable; urgency=low
 
   * Initial Release
