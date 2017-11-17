@@ -181,6 +181,7 @@ int verify_signature(const char *file_path)
     fp = fopen(signature_name, "r");
     if (!fp) {
         free(text);
+        free(sig_dir);
         return FILE_OPEN_ERROR;
     }
     char signature[TRIVIAL_LEN] = { 0, };
@@ -190,6 +191,7 @@ int verify_signature(const char *file_path)
     //do
     int ret_code = _verify_signature(g_cert_path, text, signature);
     free(text);
+    free(sig_dir);
     return ret_code; 
 }
 
