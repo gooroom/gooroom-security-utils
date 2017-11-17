@@ -1,3 +1,12 @@
+gooroom-security-utils (0.1.1+grm1u2) unstable; urgency=medium
+
+  [ hmkim ]
+  * [8fb8e090] (bug fix) added free(sig_dir) to verify_signature(). added license to grmpycaller.h.
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Fri, 17 Nov 2017 12:34:55 +0900
+
 gooroom-security-utils (0.1.1+grm1u1) unstable; urgency=medium
 
   [ hmkim ]
