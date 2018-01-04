@@ -47,12 +47,13 @@ def get_summary(logs):
     """
     실행파일 검증 상태와 관련 로그를 반환한다
     """
-    korean_text = {u'"invalid-hash"' : u'비정상 해시', u'"invalid-signature"' : u'비정상 시그니처', u'"missing-hash"' : u'해시 미존재', u'"no_label"' : '레이블 미존재'}
+    korean_text = {u'"invalid-hash"' : u'비정상 해시', u'"invalid-signature"' : u'비정상 서명', u'"missing-hash"' : u'서명 미존재', u'"no_label"' : '레이블 미존재', u'"IMA-signature-required"' : u'서명 미존재'}
     vulnerable = False
     exec_logs = []
 
     p_cause = re.compile('cause=\S*')
     p_file = re.compile('name=\S*')
+    p_comm = re.compile('comm=\S*')
     p_errorcode = re.compile('errorcode=\S*')
 
     for data in logs:
@@ -81,10 +82,13 @@ def get_summary(logs):
         elif 'audit' in data['_TRANSPORT']:
             search_cause = p_cause.search(data['MESSAGE'])
             search_file = p_file.search(data['MESSAGE'])
+            search_comm = p_comm.search(data['MESSAGE'])
             if search_cause != None and search_file != None:
                 cause_string = search_cause.group().replace('cause=', '')
-                file_string = search_file.group().replace('name=', '').replace('"', '')
-
+                if '"' in search_file.group():
+                    file_string = search_file.group().replace('name=', '').replace('"', '')
+                else:
+                    file_string = search_comm.group().replace('comm=', '').replace('"', '')
                 # 시간 변환 및 메시지 한글화
                 cause_string = korean_text[cause_string]
 
