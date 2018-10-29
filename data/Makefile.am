@@ -1,8 +1,8 @@
 bin_SCRIPTS = gooroom-security-logparser.py
 
-scriptdir=/usr/lib/gooroom-security-utils/security
+scriptdir=/usr/lib/gooroom-security-utils
 script_DATA=	\
-	security/os.py		\
-	security/boot.py		\
-	security/exe.py		\
-	security/media.py
+	default-log.conf	\
+	gsl_util.py	\
+	gooroom-security-logparser.py	\
+	translation
