@@ -14,7 +14,7 @@ DEFAULT_LOG_CONF_PATH=\
 LOG_CONF_PATH=\
     '/usr/lib/gooroom-security-utils/log.conf'
 LOG_CONF_SIGN_PATH=\
-    '/usr/lib/gooroom-security-utils/log.conf.sign'
+    '/var/tmp/gooroom-agent-service/.usr.lib.gooroom-security-utils.log.conf/log.conf+signature'
 TRANSLATION_PATH=\
     '/usr/lib/gooroom-security-utils/translation'
 
@@ -55,36 +55,39 @@ def get_run_status(service_name):
     if not service_name:
         return 'stop'
 
-    # 서비스 구동 상태와 정상 설치 여부를 검사
-    cmd = '/usr/sbin/service {} status'.format(service_name)
-    argv = shlex.split(cmd)
-    pipe = subprocess.Popen(
-        argv, 
-        stdout=subprocess.PIPE, 
-        stderr=None, 
-        shell=False)
-    status_output, error =  pipe.communicate()
-    status_output = status_output.decode('utf-8')
+    try:
+        # 서비스 구동 상태와 정상 설치 여부를 검사
+        cmd = '/usr/sbin/service {} status'.format(service_name)
+        argv = shlex.split(cmd)
+        pipe = subprocess.Popen(
+            argv, 
+            stdout=subprocess.PIPE, 
+            stderr=None, 
+            shell=False)
+        status_output, error =  pipe.communicate()
+        status_output = status_output.decode('utf-8')
 
-    cmd = '/usr/sbin/service {} check'.format(service_name)
-    argv = shlex.split(cmd)
-    pipe = subprocess.Popen(
-        argv, 
-        stdout=subprocess.PIPE, 
-        stderr=None, 
-        shell=False)
-    check_output, error =  pipe.communicate()
-    check_output = check_output.decode('utf-8')
+        cmd = '/usr/sbin/service {} check'.format(service_name)
+        argv = shlex.split(cmd)
+        pipe = subprocess.Popen(
+            argv, 
+            stdout=subprocess.PIPE, 
+            stderr=None, 
+            shell=False)
+        check_output, error =  pipe.communicate()
+        check_output = check_output.decode('utf-8')
 
-    if not 'active (exited)' in status_output \
-        and not 'active (running)' in status_output:
-        return 'stop'
-
-    if service_name != 'grac-device-daemon' \
-        and service_name != 'gooroom-agent' \
-        and not '{} active.'.format(service_name) in check_output:
+        if not 'active (exited)' in status_output \
+            and not 'active (running)' in status_output:
             return 'stop'
-    return 'run'
+
+        if service_name != 'grac-device-daemon' \
+            and service_name != 'gooroom-agent' \
+            and not '{} active.'.format(service_name) in check_output:
+                return 'stop'
+        return 'run'
+    except:
+        return 'stop'
 
 #-----------------------------------------------------------------------
 def format_exc():

@@ -18,6 +18,40 @@ from systemd import journal
 g_trans_parser = load_translation()
 
 #-----------------------------------------------------------------------
+#AGENT is using this function
+#Do not move
+def config_diff(file_contents):
+    """
+    return difference from previous config file
+    by gooroom-agent
+    """
+
+    diff_result = ''
+
+    if not os.path.exists(LOG_CONF_PATH):
+        return diff_result
+
+    with open(LOG_CONF_PATH, 'r') as f:
+        old_contents = json.loads(f.read())
+    new_contents = json.loads(file_contents)
+
+    for old_k, old_v in old_contents.items():
+        if not old_k in new_contents:
+            continue
+        new_v = new_contents[old_k]
+        for n in ('notify_level', 'show_level', 'transmit_level'):
+            if old_v[n] != new_v[n]:
+                diff_result += '{} {} {} -> {}\n'.format(
+                                                    old_k,
+                                                    n,
+                                                    old_v[n],
+                                                    new_v[n])
+    if diff_result:
+        diff_result = \
+            'log configuration has changed$(\n{})'.format(diff_result)
+    return diff_result
+
+#-----------------------------------------------------------------------
 #GRAC is using this function
 #Do not move
 def get_notify_level(printname):
