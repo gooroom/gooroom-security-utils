@@ -12,6 +12,7 @@ import re
 from gsl_util import combine_message,JournalLevel,status_lang_set
 from gsl_util import get_run_status,format_exc,load_log_config
 from gsl_util import load_translation,syslog_identifier_map
+from gsl_util import config_diff_internal
 from systemd import journal
 
 #-----------------------------------------------------------------------
@@ -26,30 +27,7 @@ def config_diff(file_contents):
     by gooroom-agent
     """
 
-    diff_result = ''
-
-    if not os.path.exists(LOG_CONF_PATH):
-        return diff_result
-
-    with open(LOG_CONF_PATH, 'r') as f:
-        old_contents = json.loads(f.read())
-    new_contents = json.loads(file_contents)
-
-    for old_k, old_v in old_contents.items():
-        if not old_k in new_contents:
-            continue
-        new_v = new_contents[old_k]
-        for n in ('notify_level', 'show_level', 'transmit_level'):
-            if old_v[n] != new_v[n]:
-                diff_result += '{} {} {} -> {}\n'.format(
-                                                    old_k,
-                                                    n,
-                                                    old_v[n],
-                                                    new_v[n])
-    if diff_result:
-        diff_result = \
-            'log configuration has changed$(\n{})'.format(diff_result)
-    return diff_result
+    return config_diff_internal(file_contents)
 
 #-----------------------------------------------------------------------
 #GRAC is using this function
