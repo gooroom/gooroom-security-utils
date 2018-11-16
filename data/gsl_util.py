@@ -63,7 +63,7 @@ def get_run_status(service_name):
         pipe = subprocess.Popen(
             argv, 
             stdout=subprocess.PIPE, 
-            stderr=None, 
+            stderr=subprocess.PIPE, 
             shell=False)
         status_output, error =  pipe.communicate()
         status_output = status_output.decode('utf-8')
@@ -73,7 +73,7 @@ def get_run_status(service_name):
         pipe = subprocess.Popen(
             argv, 
             stdout=subprocess.PIPE, 
-            stderr=None, 
+            stderr=subprocess.PIPE, 
             shell=False)
         check_output, error =  pipe.communicate()
         check_output = check_output.decode('utf-8')
@@ -144,7 +144,7 @@ def combine_message(message, ko):
     """
 
     try:
-        token_regix = re.compile('\$\(\w+\)')
+        token_regix = re.compile('\$\(.+\)', re.DOTALL)
 
         tokens = token_regix.findall(message)
         msg_values = []
@@ -199,13 +199,13 @@ def config_diff_internal(file_contents):
         new_v = new_contents[old_k]
         for n in ('notify_level', 'show_level', 'transmit_level'):
             if old_v[n] != new_v[n]:
-                diff_result += '{} {} {} -> {}\n'.format(
+                diff_result += '{} {} {}->{} '.format(
                                                     old_k,
                                                     n,
                                                     old_v[n],
                                                     new_v[n])
     if diff_result:
         diff_result = \
-            'log configuration has changed$(\n{})'.format(diff_result)
+            'log configuration has changed$({})'.format(diff_result)
     return diff_result
 

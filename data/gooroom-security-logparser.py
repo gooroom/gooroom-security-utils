@@ -245,6 +245,7 @@ def get_summary(j, mode='DAEMON'):
             #gep,iptables와 같이 별도로 처리해야 되는 경우를 구분
             if 'SYSLOG_IDENTIFIER' in entry \
                 and entry['SYSLOG_IDENTIFIER'] in identifier_map.keys():
+                print('!! ', entry['MESSAGE'])
 
                 printname = identifier_map[entry['SYSLOG_IDENTIFIER']]
                 notify_level = log_json[printname]['notify_level']
