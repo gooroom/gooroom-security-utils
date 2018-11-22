@@ -61,9 +61,10 @@ def identifier_processing(entry, mode, printname, notify_level, result):
             message = str(message.decode('unicode_escape').encode('utf-8'))
 
         #FOR GOP
-        res = re.search(g_gop_regex, message)
-        if res:
-            grmcode = res.group().split('=')[1]
+        if not grmcode:
+            res = re.search(g_gop_regex, message)
+            if res:
+                grmcode = res.group().split('=')[1]
     else:
         message = ''
 
@@ -74,6 +75,8 @@ def identifier_processing(entry, mode, printname, notify_level, result):
             message = combine_message(message, ko)
         except:
             pass
+    else:
+        return 0
 
     #SAVE
     t = entry['__REALTIME_TIMESTAMP'].strftime('%Y-%m-%d %H:%M:%S.%f')
@@ -171,7 +174,7 @@ def no_identifier_processing(entry, mode, result):
             # 로그 추가
             message = '비인가된 실행파일(%s, %s)이'\
                 '실행되어 차단하였습니다'.format(cause_string, file_string)
-            printname = 'gep-daemon'
+            printname = 'exe'
 
     if message:
         t = entry['__REALTIME_TIMESTAMP'].strftime('%Y-%m-%d %H:%M:%S.%f')
@@ -254,6 +257,20 @@ def get_summary(j, mode='DAEMON'):
                 and entry['SYSLOG_IDENTIFIER'] in identifier_map.keys():
 
                 printname = identifier_map[entry['SYSLOG_IDENTIFIER']]
+                notify_level = log_json[printname]['notify_level']
+                log_total_len += \
+                    identifier_processing(entry, 
+                                        mode, 
+                                        printname, 
+                                        notify_level, 
+                                        result)
+
+            #SYSLOG_IDENTIFIER는 map에 없지만 GROMCODE를 가지고 있는
+            #gop의 shadow-box 로그를 처리함
+            elif 'kernel' in entry['_TRANSPORT'] \
+                and 'shadow-box:' in entry['MESSAGE'][:11]:
+
+                printname = identifier_map['gop-daemon']
                 notify_level = log_json[printname]['notify_level']
                 log_total_len += \
                     identifier_processing(entry, 

@@ -144,7 +144,7 @@ def combine_message(message, ko):
     """
 
     try:
-        token_regix = re.compile('\$\(.+\)', re.DOTALL)
+        token_regix = re.compile('\$\(.+?\)', re.DOTALL)
 
         tokens = token_regix.findall(message)
         msg_values = []
