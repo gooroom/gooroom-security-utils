@@ -40,6 +40,8 @@ def get_notify_level(printname):
     return JournalLevel[load_log_config()[printname]['notify_level']].value
 
 #-----------------------------------------------------------------------
+g_gop_regex = re.compile('GRMCODE=\w+')
+
 def identifier_processing(entry, mode, printname, notify_level, result):
     """
     SYSLOG_IDENTIFIER가 있는 로그를 처리
@@ -57,6 +59,11 @@ def identifier_processing(entry, mode, printname, notify_level, result):
 
         if type(message) is bytes:
             message = str(message.decode('unicode_escape').encode('utf-8'))
+
+        #FOR GOP
+        res = re.search(g_gop_regex, message)
+        if res:
+            grmcode = res.group().split('=')[1]
     else:
         message = ''
 
@@ -114,11 +121,11 @@ def no_identifier_processing(entry, mode, result):
     printname = ''
 
     # iptables
-    if 'kernel' in entry['_TRANSPORT'] and GRAC_NETWORK_NAME in data['MESSAGE']:
-        search_src_ip = P_SRC_IP.search(data['MESSAGE'])
-        search_dst_ip = P_DST_IP.search(data['MESSAGE'])
-        search_src_port = P_SRC_PORT.search(data['MESSAGE'])
-        search_dst_port = P_DST_PORT.search(data['MESSAGE'])
+    if 'kernel' in entry['_TRANSPORT'] and GRAC_NETWORK_NAME in entry['MESSAGE']:
+        search_src_ip = P_SRC_IP.search(entry['MESSAGE'])
+        search_dst_ip = P_DST_IP.search(entry['MESSAGE'])
+        search_src_port = P_SRC_PORT.search(entry['MESSAGE'])
+        search_dst_port = P_DST_PORT.search(entry['MESSAGE'])
 
         if (search_src_ip == None or search_src_port == None or
             search_dst_ip == None or search_dst_port == None):
@@ -141,9 +148,9 @@ def no_identifier_processing(entry, mode, result):
 
 	# 커널의 IMA에서 남긴 로그
     elif 'audit' in entry['_TRANSPORT']:
-        search_cause = P_CAUSE.search(data['MESSAGE'])
-        search_file = P_FILE.search(data['MESSAGE'])
-        search_comm = P_COMM.search(data['MESSAGE'])
+        search_cause = P_CAUSE.search(entry['MESSAGE'])
+        search_file = P_FILE.search(entry['MESSAGE'])
+        search_comm = P_COMM.search(entry['MESSAGE'])
 
         if search_cause != None and search_file != None:
             cause_string = search_cause.group().replace('cause=', '')
@@ -159,7 +166,7 @@ def no_identifier_processing(entry, mode, result):
             # no_label의 경우, name 필드에 해시 값이 들어있으므로
             #사람이 인지할 수 있는 파일명으로 변환
             if cause_string == '"no_label"':
-                file_string = data['_AUDIT_FIELD_NAME'].replace('"', '')
+                file_string = entry['_AUDIT_FIELD_NAME'].replace('"', '')
 
             # 로그 추가
             message = '비인가된 실행파일(%s, %s)이'\
@@ -245,7 +252,6 @@ def get_summary(j, mode='DAEMON'):
             #gep,iptables와 같이 별도로 처리해야 되는 경우를 구분
             if 'SYSLOG_IDENTIFIER' in entry \
                 and entry['SYSLOG_IDENTIFIER'] in identifier_map.keys():
-                print('!! ', entry['MESSAGE'])
 
                 printname = identifier_map[entry['SYSLOG_IDENTIFIER']]
                 notify_level = log_json[printname]['notify_level']
