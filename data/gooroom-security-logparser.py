@@ -89,6 +89,7 @@ def identifier_processing(entry, mode, printname, notify_level, result):
 
     result[printname+'_log'].append(log)
 
+    print(printname, notify_level, entry['PRIORITY'], JournalLevel[notify_level].value)
     if entry['PRIORITY'] <= JournalLevel[notify_level].value:
         result[printname+'_status'] = status_lang_set(mode, 'vulnerable')
         result['status_summary'] = status_lang_set(mode, 'vulnerable')
@@ -212,6 +213,12 @@ def get_summary(j, mode='DAEMON'):
 
     #identifier and priority
     for identifier, printname in identifier_map.items():
+
+        ############################################
+        if log_json[printname][level_key] == 'none':
+            continue
+        ############################################
+
         match_identifier = 'SYSLOG_IDENTIFIER='+identifier
         j.add_match(match_identifier)
 

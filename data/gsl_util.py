@@ -22,6 +22,7 @@ TRANSLATION_PATH=\
 #-----------------------------------------------------------------------
 import enum
 class JournalLevel(enum.Enum):
+    none =      -1
     emerg =     0
     alert =     1
     crit =      2
