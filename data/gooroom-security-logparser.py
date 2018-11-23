@@ -122,6 +122,7 @@ def no_identifier_processing(entry, mode, result):
 
     message = ''
     printname = ''
+    internal_grmcode = ''
 
     # iptables
     if 'kernel' in entry['_TRANSPORT'] and GRAC_NETWORK_NAME in entry['MESSAGE']:
@@ -148,6 +149,7 @@ def no_identifier_processing(entry, mode, result):
                                         dst_ip_string, 
                                         dst_port_string)
         printname = 'media'
+        internal_grmcode = '001001'
 
 	# 커널의 IMA에서 남긴 로그
     elif 'audit' in entry['_TRANSPORT']:
@@ -175,11 +177,12 @@ def no_identifier_processing(entry, mode, result):
             message = '비인가된 실행파일(%s, %s)이'\
                 '실행되어 차단하였습니다'.format(cause_string, file_string)
             printname = 'exe'
+            internal_grmcode = '001002'
 
     if message:
         t = entry['__REALTIME_TIMESTAMP'].strftime('%Y-%m-%d %H:%M:%S.%f')
         log = {
-            'grmcode':'',
+            'grmcode':internal_grmcode,
             'level':JournalLevel(entry['PRIORITY']).name,
             'time':t,
             'log':'{} {}'.format(t, message),
