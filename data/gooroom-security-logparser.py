@@ -89,7 +89,6 @@ def identifier_processing(entry, mode, printname, notify_level, result):
 
     result[printname+'_log'].append(log)
 
-    print(printname, notify_level, entry['PRIORITY'], JournalLevel[notify_level].value)
     if entry['PRIORITY'] <= JournalLevel[notify_level].value:
         result[printname+'_status'] = status_lang_set(mode, 'vulnerable')
         result['status_summary'] = status_lang_set(mode, 'vulnerable')
