@@ -5,6 +5,8 @@ import simplejson as json
 import configparser
 import subprocess
 import traceback
+import OpenSSL
+import base64
 import shlex
 import re
 import os
@@ -98,6 +100,19 @@ def format_exc():
     """
 
     return '\n'.join(traceback.format_exc().split('\n')[-4:-1])
+
+#-----------------------------------------------------------------------
+def verify_signature(signature, data):
+    """
+    verify file signature
+    """
+
+    cert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, 
+        open('/etc/gooroom/agent/server_certificate.crt').read())
+
+    OpenSSL.crypto.verify(cert, 
+        base64.b64decode(signature.encode('utf8')), 
+        data.encode('utf8'), 'sha256')
 
 #-----------------------------------------------------------------------
 def load_log_config():
