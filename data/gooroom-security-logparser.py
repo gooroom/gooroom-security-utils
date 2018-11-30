@@ -85,7 +85,8 @@ def identifier_processing(entry, mode, printname, notify_level, result):
         'level':JournalLevel(entry['PRIORITY']).name,
         'time':t,
         'log':'{} {}'.format(t, message),
-        'type':status_lang_set(mode, 0) }
+        'type':status_lang_set(mode, 0),
+        'eval_level':notify_level}
 
     result[printname+'_log'].append(log)
 
@@ -114,7 +115,7 @@ KOREAN_TEXT = {
     u'"no_label"' : '레이블 미존재',
     u'"IMA-signature-required"' : u'서명 미존재'}
 
-def no_identifier_processing(entry, mode, result):
+def no_identifier_processing(entry, mode, result, log_json):
     """
     SYSLOG_IDENTIFIER가 없는 로그를 처리
     :gep,iptables
@@ -180,17 +181,23 @@ def no_identifier_processing(entry, mode, result):
             internal_grmcode = '001002'
 
     if message:
+        notify_level = log_json[printname]['notify_level']
         t = entry['__REALTIME_TIMESTAMP'].strftime('%Y-%m-%d %H:%M:%S.%f')
         log = {
             'grmcode':internal_grmcode,
             'level':JournalLevel(entry['PRIORITY']).name,
             'time':t,
             'log':'{} {}'.format(t, message),
-            'type':status_lang_set(1) }
+            'type':status_lang_set(0),
+            'eval_level':notify_level}
 
         result[printname+'_log'].append(log)
-        result[printname+'_status'] = status_lang_set(mode, 'vulnerable')
-        result['status_summary'] = status_lang_set(mode, 'vulnerable')
+
+        if entry['PRIORITY'] <= JournalLevel[notify_level].value:
+            result[printname+'_status'] = status_lang_set(mode, 'vulnerable')
+            result['status_summary'] = status_lang_set(mode, 'vulnerable')
+            log['type'] = status_lang_set(mode, 1)
+
         return len(log['log'])
     else:
         return 0
@@ -289,7 +296,7 @@ def get_summary(j, mode='DAEMON'):
                                         result)
             else:
                 log_total_len += \
-                    no_identifier_processing(entry, mode, result)
+                    no_identifier_processing(entry, mode, result, log_json)
         except:
             print(format_exc())
 
