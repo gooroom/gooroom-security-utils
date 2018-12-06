@@ -209,16 +209,30 @@ def get_summary(j, mode='DAEMON'):
     요약로그정보를 출력
     """
 
-    if mode == 'DAEMON':
-        level_key = 'transmit_level'
-    else:
-        level_key = 'show_level'
-
     log_json = load_log_config()
     identifier_map = syslog_identifier_map(log_json)
 
     #identifier and priority
     for identifier, printname in identifier_map.items():
+
+        if mode == 'DAEMON':
+            transmit_p = \
+                JournalLevel[log_json[printname]['transmit_level']].value
+            notify_p = \
+                JournalLevel[log_json[printname]['notify_level']].value
+            if transmit_p < notify_p:
+                level_key = 'notify_level'
+            else:
+                level_key = 'transmit_level'
+        else:
+            show_p = \
+                JournalLevel[log_json[printname]['show_level']].value
+            notify_p = \
+                JournalLevel[log_json[printname]['notify_level']].value
+            if show_p < notify_p:
+                level_key = 'notify_level'
+            else:
+                level_key = 'show_level'
 
         ############################################
         if log_json[printname][level_key] == 'none':
@@ -256,7 +270,7 @@ def get_summary(j, mode='DAEMON'):
         result[printname+'_run'] = status_lang_set(mode, run)
         result[printname+'_status'] = status_lang_set(mode, 'safe')
         result[printname+'_notify_level'] = log_json[printname]['notify_level']
-        result[printname+'_show_level'] = log_json[printname][level_key]
+        result[printname+'_show_level'] = log_json[printname]['show_level']
         result[printname+'_log'] = []
     result['status_summary'] = status_lang_set(mode, 'safe')
 
