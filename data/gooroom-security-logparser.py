@@ -37,7 +37,7 @@ def get_notify_level(printname):
     get notify-level in config
     """
 
-    return JournalLevel[load_log_config()[printname]['notify_level']].value
+    return JournalLevel[load_log_config('GRAC')[printname]['notify_level']].value
 
 #-----------------------------------------------------------------------
 g_gop_regex = re.compile('GRMCODE=\w+')
@@ -209,7 +209,7 @@ def get_summary(j, mode='DAEMON'):
     요약로그정보를 출력
     """
 
-    log_json = load_log_config()
+    log_json = load_log_config(mode)
     identifier_map = syslog_identifier_map(log_json)
 
     #identifier and priority

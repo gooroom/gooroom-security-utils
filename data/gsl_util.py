@@ -8,8 +8,12 @@ import traceback
 import OpenSSL
 import base64
 import shlex
+import time
+import dbus
 import re
 import os
+
+from systemd import journal
 
 #-----------------------------------------------------------------------
 DEFAULT_LOG_CONF_PATH=\
@@ -115,7 +119,28 @@ def verify_signature(signature, data):
         data.encode('utf8'), 'sha256')
 
 #-----------------------------------------------------------------------
-def load_log_config():
+SIGN_LOCK_PATH = '/var/tmp/GOOROOM-SECURITY-UTILS-SIGN-FAIL-LOCK'
+
+DBUS_NAME = 'kr.gooroom.agent'
+DBUS_OBJ = '/kr/gooroom/agent'
+DBUS_IFACE = 'kr.gooroom.agent'
+
+def do_task():
+    """
+    send job to agent
+    """
+
+    try:
+        task = '{"module":{"module_name":"config","task":{"task_name":"get_log_config","in":{}}}}'
+        system_bus = dbus.SystemBus()
+        bus_object = system_bus.get_object(DBUS_NAME, DBUS_OBJ)
+        bus_interface = dbus.Interface(bus_object, dbus_interface=DBUS_IFACE)
+        resp = bus_interface.do_task(task)
+        print(resp)
+    except:
+        print(format_exc())
+
+def load_log_config(mode):
     """
     서버설정파일의 로딩에 실패하면
     기본설정파일을 반환.
@@ -123,20 +148,44 @@ def load_log_config():
     {}을 반환.
     """
     
+    global g_sign_fail_cnt
+    verify_failed = False
     try:
         with open(LOG_CONF_PATH) as f2:
             log_string = f2.read()
         with open(LOG_CONF_SIGN_PATH) as f3:
             log_sign = f3.read()
 
-        verify_signature(log_sign, log_string)
-        return json.loads(log_string)
+        try:
+            verify_signature(log_sign, log_string)
+            if os.path.exists(SIGN_LOCK_PATH):
+                os.remove(SIGN_LOCK_PATH)
+            return json.loads(log_string)
+        except:
+            verify_failed = True
+            if mode == 'GUI':
+                if not os.path.exists(SIGN_LOCK_PATH):
+                    with open(SIGN_LOCK_PATH, 'w') as f:
+                        f.write('1')
+                    msg = 'log config verification failed'
+                    grmcode = '990011'
+                    journal.send(msg, 
+                                SYSLOG_IDENTIFIER='gooroom-agent',
+                                PRIORITY=5,
+                                GRMCODE=grmcode)
+                    #send to agent
+                    do_task()
+            raise
+
     except:
         pass
         
     try:
         with open(DEFAULT_LOG_CONF_PATH) as f:
-            return json.loads(f.read())
+            l = json.loads(f.read())
+            if verify_failed:
+                l['agent']['transmit_level'] = 'debug'
+            return l
     except:
         print(format_exc())
 
