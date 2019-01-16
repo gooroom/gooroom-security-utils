@@ -1,3 +1,27 @@
+gooroom-security-utils (0.2.1+grm1u1) unstable; urgency=medium
+
+  [ hmkim ]
+  * [7736696c] changed to new log system
+  * [3e1b49ea] added grmcode to translation file
+  * [e6111533] moved config-diff function to gsl_util
+  * [efea6dfc] added agent log translation
+  * [fbb7e50d] added logic for grmcode in message of GOP
+  * [cb5a0b3f] migrated previous gop filter
+  * [99679b96] changed default show_level from notice to info
+  * [26fdf4b3] added none log level
+  * [a7fc0744] removed debug print
+  * [62b3c218] added verify-signature
+  * [03c4f01b] added eval_level to log
+  * [f0b243d5] let notify_level be the reference value of show_level and trasmit_level.
+  * [e57bb9b6] changed browser translation
+  * [741d4553] added alert-release translation of agent
+  * [3b5595e7] added sign fail journal log
+  * [d3b8f261] media/browser policy change translation
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Wed, 16 Jan 2019 10:32:06 +0900
+
 gooroom-security-utils (0.1.2+grm1u1) unstable; urgency=medium
 
   [ hanseunghun ]
