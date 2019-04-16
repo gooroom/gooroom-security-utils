@@ -95,8 +95,8 @@ ko=비인가된 매체(마우스)가 탐지되어 차단하였습니다
 
 #BROWSER
 [050001]
-en=SIGN verified ret_code=$(0)
-ko=구름 브라우저 정책 서명 검증 코드번호=$(0)
+en=$(0) SIGN verified ret_code=$(1)
+ko=구름 브라우저 정책$(0)에 대한 서명 검증 코드번호=$(1)
 [050002]
 en=SIGN verified ok
 ko=구름 브라우저 정책 서명 검증 완료
