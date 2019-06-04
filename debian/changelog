@@ -1,3 +1,12 @@
+gooroom-security-utils (0.2.2+grm1u1) unstable; urgency=medium
+
+  [ hmkim ]
+  * [d074d6b0] added agent translation
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Tue, 19 Mar 2019 12:42:55 +0900
+
 gooroom-security-utils (0.2.1+grm1u1) unstable; urgency=medium
 
   [ hmkim ]
