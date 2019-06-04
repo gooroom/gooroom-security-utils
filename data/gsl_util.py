@@ -174,7 +174,7 @@ def load_log_config(mode):
                                 PRIORITY=5,
                                 GRMCODE=grmcode)
                     #send to agent
-                    do_task()
+                    #do_task()
             raise
 
     except:
