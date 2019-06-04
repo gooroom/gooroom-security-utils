@@ -188,7 +188,7 @@ def no_identifier_processing(entry, mode, result, log_json):
             'level':JournalLevel(entry['PRIORITY']).name,
             'time':t,
             'log':'{} {}'.format(t, message),
-            'type':status_lang_set(0),
+            'type':status_lang_set(mode, 0),
             'eval_level':notify_level}
 
         result[printname+'_log'].append(log)
