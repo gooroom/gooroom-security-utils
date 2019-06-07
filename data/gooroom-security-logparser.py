@@ -153,7 +153,7 @@ def no_identifier_processing(entry, mode, result, log_json):
         internal_grmcode = '001001'
 
 	# 커널의 IMA에서 남긴 로그
-    elif 'audit' in entry['_TRANSPORT']:
+    elif 'kernel' in entry['_TRANSPORT']:
         search_cause = P_CAUSE.search(entry['MESSAGE'])
         search_file = P_FILE.search(entry['MESSAGE'])
         search_comm = P_COMM.search(entry['MESSAGE'])
@@ -175,7 +175,7 @@ def no_identifier_processing(entry, mode, result, log_json):
                 file_string = entry['_AUDIT_FIELD_NAME'].replace('"', '')
 
             # 로그 추가
-            message = '비인가된 실행파일(%s, %s)이'\
+            message = '비인가된 실행파일({}, {})이'\
                 '실행되어 차단하였습니다'.format(cause_string, file_string)
             printname = 'exe'
             internal_grmcode = '001002'
@@ -250,8 +250,8 @@ def get_summary(j, mode='DAEMON'):
         j.add_disjunction()
 
     #IMA(gep)
-    j.add_match('_AUDIT_FIELD_OP=appraise_data')
-    j.add_match('PRIORITY=3')
+    j.add_match('SYSLOG_IDENTIFIER=kernel')
+    j.add_match('PRIORITY=5')
     j.add_disjunction()
 
     #OS 보호 및 방화벽 로그를 추려내기위한 특수한 필터
