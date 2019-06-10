@@ -127,6 +127,7 @@ def no_identifier_processing(entry, mode, result, log_json):
 
     # iptables
     if 'kernel' in entry['_TRANSPORT'] and GRAC_NETWORK_NAME in entry['MESSAGE']:
+        '''
         search_src_ip = P_SRC_IP.search(entry['MESSAGE'])
         search_dst_ip = P_DST_IP.search(entry['MESSAGE'])
         search_src_port = P_SRC_PORT.search(entry['MESSAGE'])
@@ -151,6 +152,8 @@ def no_identifier_processing(entry, mode, result, log_json):
                                         dst_port_string)
         printname = 'media'
         internal_grmcode = '001001'
+        '''
+        pass
 
 	# 커널의 IMA에서 남긴 로그
     elif 'kernel' in entry['_TRANSPORT']:
