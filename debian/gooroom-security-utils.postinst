@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+cp /usr/lib/gooroom-security-utils/gooroom-security-logparser.py /usr/bin/gooroom-security-logparser.py || true
+
+exit 0

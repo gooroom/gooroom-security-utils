@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+
+rm /usr/sbin/gooroom-security-logparser.py || true
+
+exit 0
