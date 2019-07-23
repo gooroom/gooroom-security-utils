@@ -1,3 +1,20 @@
+gooroom-security-utils (0.2.3+grm1u1) unstable; urgency=medium
+
+  [ hmkim ]
+  * [2a534694] changed 050001 translation
+  * [501c9a15] added 990300-990313 translation
+  * [5062c2d5] comment do_task
+  * [069da9e6] fixed status_lang_set bug
+  * [2ee2d2b7] comment iptables log
+  * [5b47174f] 1.4 Release
+
+  [ Seunghun Han ]
+  * [21feafd2] Change a log filter for IMA and fix log format bug
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Tue, 23 Jul 2019 18:51:36 +0900
+
 gooroom-security-utils (0.2.2+grm1u1) unstable; urgency=medium
 
   [ hmkim ]
