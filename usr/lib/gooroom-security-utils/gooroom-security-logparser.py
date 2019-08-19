@@ -5,6 +5,7 @@ import sys
 sys.path.append('/usr/lib/gooroom-security-utils')
 
 import simplejson as json
+import subprocess
 import importlib
 import datetime
 import re
@@ -212,6 +213,8 @@ def get_summary(j, mode='DAEMON'):
     요약로그정보를 출력
     """
 
+    verify_journal_disk_usage()
+
     log_json = load_log_config(mode)
     identifier_map = syslog_identifier_map(log_json)
 
@@ -319,6 +322,36 @@ def get_summary(j, mode='DAEMON'):
 
     result['log_total_len'] = log_total_len
     return result
+
+#-----------------------------------------------------------------------
+def get_current_journal_disk_usage():
+    """
+    return current journal disk usage
+    """
+
+    pp = subprocess.Popen(
+        ['/bin/journalctl', '--disk-usage'],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+
+    pp_out, pp_err = pp.communicate()
+    disk_usage = pp_out.decode('utf8').split()[6]
+    disk_unit = disk_usage[-1]
+    if disk_unit != 'G':
+        return 0
+    return float(disk_usage[:-1])
+
+#-----------------------------------------------------------------------
+def verify_journal_disk_usage():
+    """
+    if verifying is failed, raise exception
+    """
+
+    disk_usage = get_current_journal_disk_usage() 
+    print('disk_usage={}'.format(disk_usage))
+    if disk_usage > 5.0:
+        raise Exception('JOURNAL DISK USAGE({}G) '\
+            'IS TOO LARGE'.format(disk_usage))
 
 #-----------------------------------------------------------------------
 if __name__ == '__main__':
