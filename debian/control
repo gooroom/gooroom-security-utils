@@ -7,5 +7,9 @@ Standards-Version: 3.9.6
 
 Package: gooroom-security-utils
 Architecture: all
-Depends: python3-openssl, python3-simplejson, python3-systemd
-Description: This package contains binaries and moudles which have security features such as gooroom-security-logparser, grmpycaller so on.
+Depends: python3-openssl,
+         python3-simplejson,
+         python3-systemd
+Description: gooroom-security-utils
+ This package contains binaries and moudles which have security features
+ such as gooroom-security-logparser, grmpycaller so on.
