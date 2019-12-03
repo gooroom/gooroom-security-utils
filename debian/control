@@ -2,10 +2,23 @@ Source: gooroom-security-utils
 Section: admin
 Priority: optional
 Maintainer: gooroom <gooroom@gooroom.kr>
-Build-Depends: debhelper (>= 9), autotools-dev, autoconf, automake, intltool, libtool, python3-dev, pkg-config, libssl-dev
+Build-Depends: debhelper (>= 9),
+               autotools-dev,
+               autoconf,
+               automake,
+               intltool,
+               libtool,
+               python3-dev,
+               pkg-config,
+               libssl-dev
 Standards-Version: 3.9.6
 
 Package: gooroom-security-utils
 Architecture: any
-Depends: python3-openssl, python3-simplejson, python3-systemd, libpython3.5
-Description: This package contains binaries and moudles which have security features such as gooroom-security-logparser, grmpycaller so on.
+Depends: python3-openssl,
+         python3-simplejson,
+         python3-systemd,
+         libpython3.5
+Description: gooroom-security-utils
+ This package contains binaries and moudles which have security features
+ such as gooroom-security-logparser, grmpycaller so on.
