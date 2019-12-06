@@ -1,3 +1,15 @@
+gooroom-security-utils (0.2.4+grm1u1) unstable; urgency=medium
+
+  [ hmkim ]
+  * [f0648c1e] changed copyright email address
+  * [c9853736] changed Source of copyright
+  * [52c6899b] changed copyright from GPL-3 to GPL-2.0
+  * [d29ee45a] formatted debian/control
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Fri, 06 Dec 2019 12:28:22 +0900
+
 gooroom-security-utils (0.2.3+grm1u1) unstable; urgency=medium
 
   [ hmkim ]
