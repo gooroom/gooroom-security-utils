@@ -114,7 +114,12 @@ KOREAN_TEXT = {
     u'"invalid-signature"' : u'비정상 서명',
     u'"missing-hash"' : u'서명 미존재',
     u'"no_label"' : '레이블 미존재',
-    u'"IMA-signature-required"' : u'서명 미존재'}
+    u'"IMA-signature-required"' : u'서명 미존재',
+    'invalid-hash' : '비정상 해시',
+    'invalid-signature' : '비정상 서명',
+    'missing-hash' : '서명 미존재',
+    'no_label' : '레이블 미존재',
+    'IMA-signature-required' : '서명 미존재'}
 
 def no_identifier_processing(entry, mode, result, log_json):
     """
@@ -170,13 +175,15 @@ def no_identifier_processing(entry, mode, result, log_json):
             else:
                 file_string = \
                     search_comm.group().replace('comm=', '').replace('"', '')
-            # 시간 변환 및 메시지 한글화
-            cause_string = KOREAN_TEXT[cause_string]
 
             # no_label의 경우, name 필드에 해시 값이 들어있으므로
             #사람이 인지할 수 있는 파일명으로 변환
             if cause_string == '"no_label"':
                 file_string = entry['_AUDIT_FIELD_NAME'].replace('"', '')
+
+            # 시간 변환 및 메시지 한글화
+            if cause_string in KOREAN_TEXT:
+                cause_string = KOREAN_TEXT[cause_string]
 
             # 로그 추가
             message = '비인가된 실행파일({}, {})이'\
