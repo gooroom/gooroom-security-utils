@@ -289,6 +289,8 @@ def get_summary(j, mode='DAEMON'):
 
     log_total_len = 0
 
+    last_entry = None
+    now_for_nolog = datetime.datetime.now()
     for entry in j:
         if '_KERNEL_SUBSYSTEM' in entry.keys():
             continue
@@ -324,10 +326,23 @@ def get_summary(j, mode='DAEMON'):
             else:
                 log_total_len += \
                     no_identifier_processing(entry, mode, result, log_json)
+
+            #LAST ENTRY
+            last_entry = entry
         except:
             print(format_exc())
 
     result['log_total_len'] = log_total_len
+
+    if last_entry:
+        next_seek_time = last_entry['__REALTIME_TIMESTAMP'].timestamp()+0.000001
+        next_seek_time = datetime.datetime.fromtimestamp(next_seek_time)
+    else:
+        next_seek_time = now_for_nolog
+        
+    with open('/var/tmp/GOOROOM-SECURITY-LOGPARSER-NEXT-SEEKTIME', 'w') as f:
+        f.write(next_seek_time.strftime('%Y%m%d-%H%M%S.%f'))
+
     return result
 
 #-----------------------------------------------------------------------
