@@ -168,6 +168,11 @@ def no_identifier_processing(entry, mode, result, log_json):
         search_comm = P_COMM.search(entry['MESSAGE'])
 
         if search_cause != None and search_file != None:
+
+            #TEMP NEEDS
+            if search_comm and search_comm.group() and 'gnome-control-c' in search_comm.group():
+                return 0
+
             cause_string = search_cause.group().replace('cause=', '')
             if '"' in search_file.group():
                 file_string = \
