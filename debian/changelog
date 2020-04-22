@@ -1,3 +1,13 @@
+gooroom-security-utils (0.3.4+grm2u1) unstable; urgency=medium
+
+  [ hmkim ]
+  * [6ef20ac3] added GOOROOM-SECURITY-LOGPARSER-NEXT-SEEKTIME file for agent gui
+  * [350d127f] temporary(removing gnome-control-c from IMA detection)
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Wed, 22 Apr 2020 14:19:15 +0900
+
 gooroom-security-utils (0.3.3+grm2u1) unstable; urgency=medium
 
   [ hmkim ]
