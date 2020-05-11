@@ -109,8 +109,8 @@ ko=구름 브라우저의 정책이 존재하지 않습니다.
 en=POLICY DIR=$(0)
 ko=구름 브라우저의 정책 파일 경로=$(0)
 [050006]
-en=GOOROOM Trust mode = $(0) by $(1)
-ko=구름 브라우저 신뢰모드 = $(0) 접속 URL = $(1)
+en=$(0) operates in untrusted mode
+ko=$(0) 비신뢰 모드에서 동작
 
 #AGENT
 [990001]
