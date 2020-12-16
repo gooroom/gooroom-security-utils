@@ -172,6 +172,8 @@ def no_identifier_processing(entry, mode, result, log_json):
             #TEMP NEEDS
             if search_comm and search_comm.group() and 'gnome-control-c' in search_comm.group():
                 return 0
+            if search_comm and search_comm.group() and 'alsa-source-ALC' in search_comm.group():
+                return 0
 
             cause_string = search_cause.group().replace('cause=', '')
             if '"' in search_file.group():
