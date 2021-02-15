@@ -1,3 +1,13 @@
+gooroom-security-utils (0.3.5+grm2u1) unstable; urgency=medium
+
+  [ hmkim ]
+  * [fbc816f3] changed 050006 message of browser
+  * [e95566d4] add alsa-source-ALC in gep filter
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Mon, 15 Feb 2021 12:37:18 +0900
+
 gooroom-security-utils (0.3.4+grm2u1) unstable; urgency=medium
 
   [ hmkim ]
