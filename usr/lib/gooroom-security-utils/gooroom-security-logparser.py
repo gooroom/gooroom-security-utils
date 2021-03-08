@@ -8,6 +8,7 @@ import simplejson as json
 import subprocess
 import importlib
 import datetime
+import locale
 import re
 
 from gsl_util import combine_message,JournalLevel,status_lang_set
@@ -72,8 +73,10 @@ def identifier_processing(entry, mode, printname, notify_level, result):
     #TRANSLATION
     if grmcode:
         try:
-            ko = g_trans_parser.get(grmcode, 'ko')    
-            message = combine_message(message, ko)
+            lang = locale.getdefaultlocale()
+            if lang[0] == 'ko_KR':
+                ko = g_trans_parser.get(grmcode, 'ko')    
+                message = combine_message(message, ko)
         except:
             pass
     else:
