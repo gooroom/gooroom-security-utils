@@ -380,7 +380,7 @@ def verify_journal_disk_usage():
     """
 
     disk_usage = get_current_journal_disk_usage() 
-    if disk_usage > 5.0:
+    if disk_usage > 30.0:
         raise Exception('JOURNAL DISK USAGE({}G) '\
             'IS TOO LARGE'.format(disk_usage))
 
