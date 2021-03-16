@@ -391,8 +391,12 @@ if __name__ == '__main__':
 
     # 시간과 필터 설정
     if len(sys.argv) > 1:
-        from_time = datetime.datetime.strptime(sys.argv[1], '%Y%m%d-%H%M%S.%f')
-        j.seek_realtime(from_time)
+        try:
+            from_time = datetime.datetime.strptime(sys.argv[1], '%Y%m%d-%H%M%S.%f')
+            j.seek_realtime(from_time)
+        except ValueError:
+            print(f'Invalid seek time value. {sys.argv[1]}')
+            print('seek time format: %Y%m%d-%H%M%S.%f')
 
     print('JSON-ANCHOR=%s' % json.dumps(
                                 get_summary(j, mode='GUI'), 
