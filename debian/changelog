@@ -1,3 +1,16 @@
+gooroom-security-utils (0.3.6+grm2u1) unstable; urgency=medium
+
+  [ Haru ]
+  * [03a7ff36] Host language translation.
+
+  [ byunghui.jeun ]
+  * [4e2967f5] Increase Journal Usage Maximum Value.
+  * [7ce843f5] ValueError Handling.
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Thu, 01 Apr 2021 09:57:10 +0900
+
 gooroom-security-utils (0.3.5+grm2u1) unstable; urgency=medium
 
   [ hmkim ]
