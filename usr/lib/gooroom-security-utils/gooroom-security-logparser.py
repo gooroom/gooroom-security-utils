@@ -302,6 +302,9 @@ def get_summary(j, mode='DAEMON'):
     last_entry = None
     now_for_nolog = datetime.datetime.now()
     for entry in j:
+        if entry['__REALTIME_TIMESTAMP'].timestamp() > datetime.datetime.now().timestamp():
+            continue
+
         if '_KERNEL_SUBSYSTEM' in entry.keys():
             continue
 
