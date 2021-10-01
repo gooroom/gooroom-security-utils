@@ -1,3 +1,13 @@
+gooroom-security-utils (0.3.7+grm2u1) unstable; urgency=medium
+
+  [ boyeon.choi ]
+  * [9128e724] Added gooroom-security-logparser-wrapper
+
+  [ byunghui.jeun ]
+  * [1b4b216b] Add logparser entry time filter.
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Fri, 01 Oct 2021 20:10:58 +0900
+
 gooroom-security-utils (0.3.6+grm2u1) unstable; urgency=medium
 
   [ Haru ]
