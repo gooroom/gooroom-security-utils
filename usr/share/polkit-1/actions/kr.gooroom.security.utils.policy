@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+"-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+"http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>The Gooroom Project</vendor>
+
+  <action id="kr.gooroom.security.utils.logparser.seektime">
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/gooroom-security-utils/gooroom-logparser-seektime-helper</annotate>
+  </action>
+
+  <action id="kr.gooroom.security.utils.record.vulnerable">
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/gooroom-security-utils/gooroom-security-status-vulnerable-helper</annotate>
+  </action>
+
+  <action id="kr.gooroom.security.utils.logparser.run">
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/gooroom-security-utils/gooroom-security-logparser-wrapper</annotate>
+  </action>
+
+</policyconfig>
+

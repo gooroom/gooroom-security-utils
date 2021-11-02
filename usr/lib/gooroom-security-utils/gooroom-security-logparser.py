@@ -8,6 +8,7 @@ import simplejson as json
 import subprocess
 import importlib
 import datetime
+import locale
 import re
 
 from gsl_util import combine_message,JournalLevel,status_lang_set
@@ -72,8 +73,10 @@ def identifier_processing(entry, mode, printname, notify_level, result):
     #TRANSLATION
     if grmcode:
         try:
-            ko = g_trans_parser.get(grmcode, 'ko')    
-            message = combine_message(message, ko)
+            lang = locale.getdefaultlocale()
+            if lang[0] == 'ko_KR':
+                ko = g_trans_parser.get(grmcode, 'ko')    
+                message = combine_message(message, ko)
         except:
             pass
     else:
@@ -171,6 +174,8 @@ def no_identifier_processing(entry, mode, result, log_json):
 
             #TEMP NEEDS
             if search_comm and search_comm.group() and 'gnome-control-c' in search_comm.group():
+                return 0
+            if search_comm and search_comm.group() and 'alsa-source-ALC' in search_comm.group():
                 return 0
 
             cause_string = search_cause.group().replace('cause=', '')
@@ -297,6 +302,9 @@ def get_summary(j, mode='DAEMON'):
     last_entry = None
     now_for_nolog = datetime.datetime.now()
     for entry in j:
+        if entry['__REALTIME_TIMESTAMP'].timestamp() > datetime.datetime.now().timestamp():
+            continue
+
         if '_KERNEL_SUBSYSTEM' in entry.keys():
             continue
 
@@ -375,7 +383,7 @@ def verify_journal_disk_usage():
     """
 
     disk_usage = get_current_journal_disk_usage() 
-    if disk_usage > 5.0:
+    if disk_usage > 30.0:
         raise Exception('JOURNAL DISK USAGE({}G) '\
             'IS TOO LARGE'.format(disk_usage))
 
@@ -386,8 +394,12 @@ if __name__ == '__main__':
 
     # 시간과 필터 설정
     if len(sys.argv) > 1:
-        from_time = datetime.datetime.strptime(sys.argv[1], '%Y%m%d-%H%M%S.%f')
-        j.seek_realtime(from_time)
+        try:
+            from_time = datetime.datetime.strptime(sys.argv[1], '%Y%m%d-%H%M%S.%f')
+            j.seek_realtime(from_time)
+        except ValueError:
+            print(f'Invalid seek time value. {sys.argv[1]}')
+            print('seek time format: %Y%m%d-%H%M%S.%f')
 
     print('JSON-ANCHOR=%s' % json.dumps(
                                 get_summary(j, mode='GUI'), 

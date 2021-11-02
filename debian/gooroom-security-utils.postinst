@@ -1,5 +1,8 @@
 #!/bin/sh
 set -e
 cp /usr/lib/gooroom-security-utils/gooroom-security-logparser.py /usr/bin/gooroom-security-logparser.py || true
+cp /usr/lib/gooroom-security-utils/gooroom-security-logparser-wrapper /usr/bin/gooroom-security-logparser || true
+cp /usr/lib/gooroom-security-utils/gooroom-logparser-seektime-helper /usr/bin/gooroom-logparser-seektime-helper || true
+cp /usr/lib/gooroom-security-utils/gooroom-security-status-vulnerable-helper /usr/bin/gooroom-security-status-vulnerable-helper || true
 
 exit 0

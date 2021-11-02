@@ -2,5 +2,8 @@
 set -e
 
 rm /usr/sbin/gooroom-security-logparser.py || true
+rm /usr/sbin/gooroom-security-logparser-wrapper || true
+rm /usr/sbin/gooroom-logparser-seektime-helper || true
+rm /usr/sbin/gooroom-security-status-vulnerable-helper || true
 
 exit 0
