@@ -1,3 +1,10 @@
+gooroom-security-utils (0.3.7+grm3u1) unstable; urgency=medium
+
+  [ jongkyung.woo ]
+  * [bbb1507a] Rebuild on gooroom-3.0
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Sun, 05 Dec 2021 16:29:50 +0900
+
 gooroom-security-utils (0.3.7+grm2u1) unstable; urgency=medium
 
   [ boyeon.choi ]
